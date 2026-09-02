@@ -1,0 +1,14 @@
+{
+  "name": "guess-engine-server",
+  "version": "1.0.0",
+  "description": "Backend API for the guess-and-vote game engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oscar Santos",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
