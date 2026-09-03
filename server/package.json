@@ -3,22 +3,28 @@
   "version": "1.0.0",
   "description": "Backend API for the guess-and-vote game engine",
   "main": "index.js",
-  "type":"module",
-   "scripts": {
-    "dev":"npx tsx src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "npx tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "check": "tsc --noEmit",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma skills sync || exit 0",
+    "contract:emit": "prisma contract emit"
   },
   "author": "Oscar Santos",
   "license": "ISC",
   "dependencies": {
+    "@prisma/orm-postgres": "^8.0.0-rc.8",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@prisma/cli-engine": "^0.2.3",
     "@types/express": "^5.0.6",
     "@types/node": "^26.4.1",
+    "prisma": "^8.0.0-rc.10",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }

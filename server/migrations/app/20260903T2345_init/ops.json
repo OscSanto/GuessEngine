@@ -1,0 +1,787 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.item",
+    "label": "Create table \"item\"",
+    "summary": "Creates table \"item\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "item"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"item\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"item\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"item\"",
+        "sql": "CREATE TABLE \"public\".\"item\" (\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"topicId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"item\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"item\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.statType",
+    "label": "Create table \"statType\"",
+    "summary": "Creates table \"statType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "statType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"statType\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statType\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"statType\"",
+        "sql": "CREATE TABLE \"public\".\"statType\" (\n  \"id\" text NOT NULL,\n  \"isGuessable\" bool DEFAULT true NOT NULL,\n  \"key\" text NOT NULL,\n  \"label\" text NOT NULL,\n  \"topicId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"statType\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statType\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.statValue",
+    "label": "Create table \"statValue\"",
+    "summary": "Creates table \"statValue\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "statValue"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"statValue\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statValue\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"statValue\"",
+        "sql": "CREATE TABLE \"public\".\"statValue\" (\n  \"id\" text NOT NULL,\n  \"itemId\" text NOT NULL,\n  \"statTypeId\" text NOT NULL,\n  \"value\" numeric NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"statValue\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statValue\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.topic",
+    "label": "Create table \"topic\"",
+    "summary": "Creates table \"topic\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "topic"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"topic\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"topic\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"topic\"",
+        "sql": "CREATE TABLE \"public\".\"topic\" (\n  \"description\" text,\n  \"id\" text NOT NULL,\n  \"isActive\" bool DEFAULT true NOT NULL,\n  \"name\" text NOT NULL,\n  \"slug\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"topic\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"topic\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.voteDimension",
+    "label": "Create table \"voteDimension\"",
+    "summary": "Creates table \"voteDimension\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "voteDimension"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"voteDimension\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"voteDimension\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"voteDimension\"",
+        "sql": "CREATE TABLE \"public\".\"voteDimension\" (\n  \"id\" text NOT NULL,\n  \"key\" text NOT NULL,\n  \"label\" text NOT NULL,\n  \"topicId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"voteDimension\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"voteDimension\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.statType.statType_topicId_key_key",
+    "label": "Add unique constraint on \"statType\" (topicId, key)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "statType_topicId_key_key",
+        "table": "statType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"statType_topicId_key_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statType_topicId_key_key",
+          "public",
+          "\"public\".\"statType\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"statType_topicId_key_key\"",
+        "sql": "ALTER TABLE \"public\".\"statType\" ADD CONSTRAINT \"statType_topicId_key_key\" UNIQUE (\"topicId\", \"key\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"statType_topicId_key_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statType_topicId_key_key",
+          "public",
+          "\"public\".\"statType\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.statValue.statValue_itemId_statTypeId_key",
+    "label": "Add unique constraint on \"statValue\" (itemId, statTypeId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "statValue_itemId_statTypeId_key",
+        "table": "statValue"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"statValue_itemId_statTypeId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statValue_itemId_statTypeId_key",
+          "public",
+          "\"public\".\"statValue\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"statValue_itemId_statTypeId_key\"",
+        "sql": "ALTER TABLE \"public\".\"statValue\" ADD CONSTRAINT \"statValue_itemId_statTypeId_key\" UNIQUE (\"itemId\", \"statTypeId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"statValue_itemId_statTypeId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statValue_itemId_statTypeId_key",
+          "public",
+          "\"public\".\"statValue\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.topic.topic_slug_key",
+    "label": "Add unique constraint on \"topic\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "topic_slug_key",
+        "table": "topic"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"topic_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "topic_slug_key",
+          "public",
+          "\"public\".\"topic\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"topic_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"topic\" ADD CONSTRAINT \"topic_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"topic_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "topic_slug_key",
+          "public",
+          "\"public\".\"topic\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.voteDimension.voteDimension_topicId_key_key",
+    "label": "Add unique constraint on \"voteDimension\" (topicId, key)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "voteDimension_topicId_key_key",
+        "table": "voteDimension"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"voteDimension_topicId_key_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "voteDimension_topicId_key_key",
+          "public",
+          "\"public\".\"voteDimension\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"voteDimension_topicId_key_key\"",
+        "sql": "ALTER TABLE \"public\".\"voteDimension\" ADD CONSTRAINT \"voteDimension_topicId_key_key\" UNIQUE (\"topicId\", \"key\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"voteDimension_topicId_key_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "voteDimension_topicId_key_key",
+          "public",
+          "\"public\".\"voteDimension\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.item.item_topicId_idx_6f05808f",
+    "label": "Create index \"item_topicId_idx_6f05808f\" on \"item\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "item_topicId_idx_6f05808f",
+        "table": "item"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"item_topicId_idx_6f05808f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"item_topicId_idx_6f05808f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"item_topicId_idx_6f05808f\"",
+        "sql": "CREATE INDEX \"item_topicId_idx_6f05808f\" ON \"public\".\"item\" (\"topicId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"item_topicId_idx_6f05808f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"item_topicId_idx_6f05808f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.statType.statType_topicId_idx_6f05808f",
+    "label": "Create index \"statType_topicId_idx_6f05808f\" on \"statType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "statType_topicId_idx_6f05808f",
+        "table": "statType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"statType_topicId_idx_6f05808f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statType_topicId_idx_6f05808f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"statType_topicId_idx_6f05808f\"",
+        "sql": "CREATE INDEX \"statType_topicId_idx_6f05808f\" ON \"public\".\"statType\" (\"topicId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"statType_topicId_idx_6f05808f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statType_topicId_idx_6f05808f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.statValue.statValue_itemId_idx_41357140",
+    "label": "Create index \"statValue_itemId_idx_41357140\" on \"statValue\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "statValue_itemId_idx_41357140",
+        "table": "statValue"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"statValue_itemId_idx_41357140\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statValue_itemId_idx_41357140\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"statValue_itemId_idx_41357140\"",
+        "sql": "CREATE INDEX \"statValue_itemId_idx_41357140\" ON \"public\".\"statValue\" (\"itemId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"statValue_itemId_idx_41357140\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statValue_itemId_idx_41357140\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.statValue.statValue_statTypeId_idx_4f96df42",
+    "label": "Create index \"statValue_statTypeId_idx_4f96df42\" on \"statValue\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "statValue_statTypeId_idx_4f96df42",
+        "table": "statValue"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"statValue_statTypeId_idx_4f96df42\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statValue_statTypeId_idx_4f96df42\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"statValue_statTypeId_idx_4f96df42\"",
+        "sql": "CREATE INDEX \"statValue_statTypeId_idx_4f96df42\" ON \"public\".\"statValue\" (\"statTypeId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"statValue_statTypeId_idx_4f96df42\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"statValue_statTypeId_idx_4f96df42\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.voteDimension.voteDimension_topicId_idx_6f05808f",
+    "label": "Create index \"voteDimension_topicId_idx_6f05808f\" on \"voteDimension\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "voteDimension_topicId_idx_6f05808f",
+        "table": "voteDimension"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"voteDimension_topicId_idx_6f05808f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"voteDimension_topicId_idx_6f05808f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"voteDimension_topicId_idx_6f05808f\"",
+        "sql": "CREATE INDEX \"voteDimension_topicId_idx_6f05808f\" ON \"public\".\"voteDimension\" (\"topicId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"voteDimension_topicId_idx_6f05808f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"voteDimension_topicId_idx_6f05808f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.item.item_topicId_fkey",
+    "label": "Add foreign key \"item_topicId_fkey\" on \"item\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "item_topicId_fkey",
+        "table": "item"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"item_topicId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "item_topicId_fkey",
+          "public",
+          "\"public\".\"item\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"item_topicId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"item\"\nADD CONSTRAINT \"item_topicId_fkey\"\nFOREIGN KEY (\"topicId\")\nREFERENCES \"public\".\"topic\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"item_topicId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "item_topicId_fkey",
+          "public",
+          "\"public\".\"item\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.statType.statType_topicId_fkey",
+    "label": "Add foreign key \"statType_topicId_fkey\" on \"statType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "statType_topicId_fkey",
+        "table": "statType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"statType_topicId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statType_topicId_fkey",
+          "public",
+          "\"public\".\"statType\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"statType_topicId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"statType\"\nADD CONSTRAINT \"statType_topicId_fkey\"\nFOREIGN KEY (\"topicId\")\nREFERENCES \"public\".\"topic\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"statType_topicId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statType_topicId_fkey",
+          "public",
+          "\"public\".\"statType\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.statValue.statValue_itemId_fkey",
+    "label": "Add foreign key \"statValue_itemId_fkey\" on \"statValue\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "statValue_itemId_fkey",
+        "table": "statValue"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"statValue_itemId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statValue_itemId_fkey",
+          "public",
+          "\"public\".\"statValue\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"statValue_itemId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"statValue\"\nADD CONSTRAINT \"statValue_itemId_fkey\"\nFOREIGN KEY (\"itemId\")\nREFERENCES \"public\".\"item\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"statValue_itemId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statValue_itemId_fkey",
+          "public",
+          "\"public\".\"statValue\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.statValue.statValue_statTypeId_fkey",
+    "label": "Add foreign key \"statValue_statTypeId_fkey\" on \"statValue\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "statValue_statTypeId_fkey",
+        "table": "statValue"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"statValue_statTypeId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statValue_statTypeId_fkey",
+          "public",
+          "\"public\".\"statValue\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"statValue_statTypeId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"statValue\"\nADD CONSTRAINT \"statValue_statTypeId_fkey\"\nFOREIGN KEY (\"statTypeId\")\nREFERENCES \"public\".\"statType\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"statValue_statTypeId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "statValue_statTypeId_fkey",
+          "public",
+          "\"public\".\"statValue\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.voteDimension.voteDimension_topicId_fkey",
+    "label": "Add foreign key \"voteDimension_topicId_fkey\" on \"voteDimension\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "voteDimension_topicId_fkey",
+        "table": "voteDimension"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"voteDimension_topicId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "voteDimension_topicId_fkey",
+          "public",
+          "\"public\".\"voteDimension\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"voteDimension_topicId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"voteDimension\"\nADD CONSTRAINT \"voteDimension_topicId_fkey\"\nFOREIGN KEY (\"topicId\")\nREFERENCES \"public\".\"topic\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"voteDimension_topicId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "voteDimension_topicId_fkey",
+          "public",
+          "\"public\".\"voteDimension\""
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,59 @@
+// use prisma-next
+// Models required{Topic, Item, StatType, StatValue, VoteDimension,Player, Guess,Vote}
+
+model Topic {
+  id          String   @id @default(uuid())  // primary key, auto-generated
+  slug        String   @unique               // "fastfood" — URL-friendly, no dupes
+  name        String                         // "Fast Food Showdown"
+  description String?                         // optional (the ? makes it nullable)
+  isActive    Boolean  @default(true)         // toggle a topic on/off
+
+  // Relations — a topic HAS MANY of each of these.
+  // These are lists; the actual FK lives on the child models.
+  statTypes      StatType[]
+  voteDimensions VoteDimension[]
+  items          Item[]
+}
+model Item {
+  id      String @id @default(uuid())
+  topicId String
+  name    String                          // "Big Mac", "Abyssal whip"
+
+  topic      Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  statValues StatValue[]                   // an item HAS MANY stat values
+}
+
+model StatValue {
+  id         String  @id @default(uuid())
+  itemId     String
+  statTypeId String
+  value      Decimal                       // 563 (calories), 2.99 (price)
+
+  item     Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  statType StatType @relation(fields: [statTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, statTypeId])            // one value per item per stat
+}
+
+model StatType {
+  id          String  @id @default(uuid())
+  topicId     String
+  key         String                        // "calories" — used by code
+  label       String                        // "Calories" — shown to users
+  isGuessable Boolean @default(true)
+
+  statValues StatValue[]
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  @@unique([topicId, key])
+}
+
+model VoteDimension {
+  id      String @id @default(uuid())
+  topicId String
+  key     String                            // "taste"
+  label   String                            // "Which tastes better?"
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, key])
+}
