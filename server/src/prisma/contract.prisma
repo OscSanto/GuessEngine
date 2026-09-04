@@ -54,6 +54,47 @@ model VoteDimension {
   label   String                            // "Which tastes better?"
 
   topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
-
+  votes Vote[]
   @@unique([topicId, key])
+}
+
+model Player {
+  id        String   @id @default(uuid())
+  token     String   @unique               // IP-derived or cached client token
+  createdAt DateTime @default(now())        // when we first saw them
+
+  guesses Guess[]                           // a player HAS MANY guesses
+  votes   Vote[]                            // and HAS MANY votes
+}
+
+model Guess {
+  id            String   @id @default(uuid())
+  playerId      String
+  itemAId       String                      // the two items shown
+  itemBId       String
+  statTypeId    String                      // which stat they guessed on
+  mode          String                      // "higher_lower" or "over_under"
+  userAnswer    String                      // what they picked
+  isCorrect     Boolean                     // did they get it right
+  responseMs    Int?                        // how fast (optional) — speed scoring
+  createdAt     DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([itemAId, itemBId, statTypeId])
+}
+
+model Vote {
+  id          String   @id @default(uuid())
+  playerId    String
+  dimensionId String                        // which vote axis (e.g. taste)
+  itemAId     String                        // normalized: always smaller id first
+  itemBId     String
+  choice      String                        // "a" or "b" — which they preferred
+  createdAt   DateTime @default(now())
+
+  player    Player        @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  dimension VoteDimension @relation(fields: [dimensionId], references: [id], onDelete: Cascade)
+
+  @@index([dimensionId, itemAId, itemBId])
 }

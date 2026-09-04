@@ -1,0 +1,482 @@
+[
+  {
+    "id": "table.guess",
+    "label": "Create table \"guess\"",
+    "summary": "Creates table \"guess\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "guess"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"guess\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"guess\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"guess\"",
+        "sql": "CREATE TABLE \"public\".\"guess\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"isCorrect\" bool NOT NULL,\n  \"itemAId\" text NOT NULL,\n  \"itemBId\" text NOT NULL,\n  \"mode\" text NOT NULL,\n  \"playerId\" text NOT NULL,\n  \"responseMs\" int4,\n  \"statTypeId\" text NOT NULL,\n  \"userAnswer\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"guess\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"guess\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.player",
+    "label": "Create table \"player\"",
+    "summary": "Creates table \"player\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "player"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"player\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"player\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"player\"",
+        "sql": "CREATE TABLE \"public\".\"player\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"token\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"player\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"player\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.vote",
+    "label": "Create table \"vote\"",
+    "summary": "Creates table \"vote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "vote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"vote\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"vote\"",
+        "sql": "CREATE TABLE \"public\".\"vote\" (\n  \"choice\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"dimensionId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"itemAId\" text NOT NULL,\n  \"itemBId\" text NOT NULL,\n  \"playerId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"vote\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.player.player_token_key",
+    "label": "Add unique constraint on \"player\" (token)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "player_token_key",
+        "table": "player"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"player_token_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "player_token_key",
+          "public",
+          "\"public\".\"player\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"player_token_key\"",
+        "sql": "ALTER TABLE \"public\".\"player\" ADD CONSTRAINT \"player_token_key\" UNIQUE (\"token\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"player_token_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "player_token_key",
+          "public",
+          "\"public\".\"player\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.guess.guess_itemAId_itemBId_statTypeId_idx_d0432812",
+    "label": "Create index \"guess_itemAId_itemBId_statTypeId_idx_d0432812\" on \"guess\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "guess_itemAId_itemBId_statTypeId_idx_d0432812",
+        "table": "guess"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"guess_itemAId_itemBId_statTypeId_idx_d0432812\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"guess_itemAId_itemBId_statTypeId_idx_d0432812\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"guess_itemAId_itemBId_statTypeId_idx_d0432812\"",
+        "sql": "CREATE INDEX \"guess_itemAId_itemBId_statTypeId_idx_d0432812\" ON \"public\".\"guess\" (\"itemAId\", \"itemBId\", \"statTypeId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"guess_itemAId_itemBId_statTypeId_idx_d0432812\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"guess_itemAId_itemBId_statTypeId_idx_d0432812\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.guess.guess_playerId_idx_710cf1aa",
+    "label": "Create index \"guess_playerId_idx_710cf1aa\" on \"guess\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "guess_playerId_idx_710cf1aa",
+        "table": "guess"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"guess_playerId_idx_710cf1aa\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"guess_playerId_idx_710cf1aa\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"guess_playerId_idx_710cf1aa\"",
+        "sql": "CREATE INDEX \"guess_playerId_idx_710cf1aa\" ON \"public\".\"guess\" (\"playerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"guess_playerId_idx_710cf1aa\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"guess_playerId_idx_710cf1aa\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.vote.vote_dimensionId_idx_4706127b",
+    "label": "Create index \"vote_dimensionId_idx_4706127b\" on \"vote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "vote_dimensionId_idx_4706127b",
+        "table": "vote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"vote_dimensionId_idx_4706127b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote_dimensionId_idx_4706127b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"vote_dimensionId_idx_4706127b\"",
+        "sql": "CREATE INDEX \"vote_dimensionId_idx_4706127b\" ON \"public\".\"vote\" (\"dimensionId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"vote_dimensionId_idx_4706127b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote_dimensionId_idx_4706127b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.vote.vote_dimensionId_itemAId_itemBId_idx_ef0c39f5",
+    "label": "Create index \"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\" on \"vote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "vote_dimensionId_itemAId_itemBId_idx_ef0c39f5",
+        "table": "vote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\"",
+        "sql": "CREATE INDEX \"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\" ON \"public\".\"vote\" (\"dimensionId\", \"itemAId\", \"itemBId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote_dimensionId_itemAId_itemBId_idx_ef0c39f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.vote.vote_playerId_idx_710cf1aa",
+    "label": "Create index \"vote_playerId_idx_710cf1aa\" on \"vote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "vote_playerId_idx_710cf1aa",
+        "table": "vote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"vote_playerId_idx_710cf1aa\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote_playerId_idx_710cf1aa\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"vote_playerId_idx_710cf1aa\"",
+        "sql": "CREATE INDEX \"vote_playerId_idx_710cf1aa\" ON \"public\".\"vote\" (\"playerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"vote_playerId_idx_710cf1aa\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"vote_playerId_idx_710cf1aa\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.guess.guess_playerId_fkey",
+    "label": "Add foreign key \"guess_playerId_fkey\" on \"guess\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "guess_playerId_fkey",
+        "table": "guess"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"guess_playerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "guess_playerId_fkey",
+          "public",
+          "\"public\".\"guess\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"guess_playerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"guess\"\nADD CONSTRAINT \"guess_playerId_fkey\"\nFOREIGN KEY (\"playerId\")\nREFERENCES \"public\".\"player\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"guess_playerId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "guess_playerId_fkey",
+          "public",
+          "\"public\".\"guess\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.vote.vote_playerId_fkey",
+    "label": "Add foreign key \"vote_playerId_fkey\" on \"vote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "vote_playerId_fkey",
+        "table": "vote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"vote_playerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "vote_playerId_fkey",
+          "public",
+          "\"public\".\"vote\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"vote_playerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"vote\"\nADD CONSTRAINT \"vote_playerId_fkey\"\nFOREIGN KEY (\"playerId\")\nREFERENCES \"public\".\"player\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"vote_playerId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "vote_playerId_fkey",
+          "public",
+          "\"public\".\"vote\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.vote.vote_dimensionId_fkey",
+    "label": "Add foreign key \"vote_dimensionId_fkey\" on \"vote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "vote_dimensionId_fkey",
+        "table": "vote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"vote_dimensionId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "vote_dimensionId_fkey",
+          "public",
+          "\"public\".\"vote\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"vote_dimensionId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"vote\"\nADD CONSTRAINT \"vote_dimensionId_fkey\"\nFOREIGN KEY (\"dimensionId\")\nREFERENCES \"public\".\"voteDimension\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"vote_dimensionId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "vote_dimensionId_fkey",
+          "public",
+          "\"public\".\"vote\""
+        ]
+      }
+    ]
+  }
+]

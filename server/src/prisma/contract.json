@@ -4,8 +4,16 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
+    "guess": {
+      "model": "Guess",
+      "namespace": "public"
+    },
     "item": {
       "model": "Item",
+      "namespace": "public"
+    },
+    "player": {
+      "model": "Player",
       "namespace": "public"
     },
     "statType": {
@@ -20,6 +28,10 @@
       "model": "Topic",
       "namespace": "public"
     },
+    "vote": {
+      "model": "Vote",
+      "namespace": "public"
+    },
     "voteDimension": {
       "model": "VoteDimension",
       "namespace": "public"
@@ -29,6 +41,133 @@
     "namespaces": {
       "public": {
         "models": {
+          "Guess": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "isCorrect": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "itemAId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "itemBId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "mode": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "playerId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "responseMs": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "statTypeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "userAnswer": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "player": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "playerId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Player",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "isCorrect": {
+                  "column": "isCorrect"
+                },
+                "itemAId": {
+                  "column": "itemAId"
+                },
+                "itemBId": {
+                  "column": "itemBId"
+                },
+                "mode": {
+                  "column": "mode"
+                },
+                "playerId": {
+                  "column": "playerId"
+                },
+                "responseMs": {
+                  "column": "responseMs"
+                },
+                "statTypeId": {
+                  "column": "statTypeId"
+                },
+                "userAnswer": {
+                  "column": "userAnswer"
+                }
+              },
+              "namespaceId": "public",
+              "table": "guess"
+            }
+          },
           "Item": {
             "fields": {
               "id": {
@@ -99,6 +238,78 @@
               },
               "namespaceId": "public",
               "table": "item"
+            }
+          },
+          "Player": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "token": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "guesses": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "playerId"
+                  ]
+                },
+                "to": {
+                  "model": "Guess",
+                  "namespace": "public"
+                }
+              },
+              "votes": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "playerId"
+                  ]
+                },
+                "to": {
+                  "model": "Vote",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "token": {
+                  "column": "token"
+                }
+              },
+              "namespaceId": "public",
+              "table": "player"
             }
           },
           "StatType": {
@@ -382,6 +593,118 @@
               "table": "topic"
             }
           },
+          "Vote": {
+            "fields": {
+              "choice": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "dimensionId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "itemAId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "itemBId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "playerId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "dimension": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "dimensionId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "VoteDimension",
+                  "namespace": "public"
+                }
+              },
+              "player": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "playerId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Player",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "choice": {
+                  "column": "choice"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "dimensionId": {
+                  "column": "dimensionId"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "itemAId": {
+                  "column": "itemAId"
+                },
+                "itemBId": {
+                  "column": "itemBId"
+                },
+                "playerId": {
+                  "column": "playerId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "vote"
+            }
+          },
           "VoteDimension": {
             "fields": {
               "id": {
@@ -428,6 +751,21 @@
                   "model": "Topic",
                   "namespace": "public"
                 }
+              },
+              "votes": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "dimensionId"
+                  ]
+                },
+                "to": {
+                  "model": "Vote",
+                  "namespace": "public"
+                }
               }
             },
             "storage": {
@@ -458,6 +796,109 @@
       "public": {
         "entries": {
           "table": {
+            "guess": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "isCorrect": {
+                  "codecId": "pg/bool@1",
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "itemAId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "itemBId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "mode": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "playerId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "responseMs": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "statTypeId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "userAnswer": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "playerId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "guess"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "player"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "itemAId",
+                    "itemBId",
+                    "statTypeId"
+                  ],
+                  "name": "guess_itemAId_itemBId_statTypeId_idx_d0432812",
+                  "prefix": "guess_itemAId_itemBId_statTypeId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "playerId"
+                  ],
+                  "name": "guess_playerId_idx_710cf1aa",
+                  "prefix": "guess_playerId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "item": {
               "columns": {
                 "id": {
@@ -511,6 +952,43 @@
                 ]
               },
               "uniques": []
+            },
+            "player": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "token": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "token"
+                  ]
+                }
+              ]
             },
             "statType": {
               "columns": {
@@ -725,6 +1203,119 @@
                 }
               ]
             },
+            "vote": {
+              "columns": {
+                "choice": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "dimensionId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "itemAId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "itemBId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "playerId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "playerId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "vote"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "player"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "dimensionId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "vote"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "voteDimension"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "dimensionId"
+                  ],
+                  "name": "vote_dimensionId_idx_4706127b",
+                  "prefix": "vote_dimensionId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "dimensionId",
+                    "itemAId",
+                    "itemBId"
+                  ],
+                  "name": "vote_dimensionId_itemAId_itemBId_idx_ef0c39f5",
+                  "prefix": "vote_dimensionId_itemAId_itemBId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "playerId"
+                  ],
+                  "name": "vote_playerId_idx_710cf1aa",
+                  "prefix": "vote_playerId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "voteDimension": {
               "columns": {
                 "id": {
@@ -797,10 +1388,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "87d51d0fb434fe2cf613fc4ebd5b392e182a967e90d8bdd5eb4cc9d057b8a329"
+    "storageHash": "3e9be6cd56200b240cf5c3d908e8e37d352bfad5175a461268aa057049b9d36f"
   },
   "execution": {
-    "executionHash": "6fff0e4646f1870ceda9fdff6d7249f2127e93342810460dd68bc850056c88db",
+    "executionHash": "9ddb589b12e0acdae4087daf614e7a35e931e4cf6e52fa4f17392143526ff8dc",
     "mutations": {
       "defaults": [
         {
@@ -811,7 +1402,29 @@
           "ref": {
             "column": "id",
             "namespace": "public",
+            "table": "guess"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
             "table": "item"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "player"
           }
         },
         {
@@ -845,6 +1458,17 @@
             "column": "id",
             "namespace": "public",
             "table": "topic"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "vote"
           }
         },
         {
