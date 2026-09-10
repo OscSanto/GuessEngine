@@ -2,9 +2,8 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "./src",
+    "rootDir": "./src", // when 'rootDir':'./src', any .ts file outside is not compiled. [Ex: prisma migration plan; any .ts at project root; primsa.config.ts; will all cause error]. 
     "outDir": "./dist",
-
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "preserve",
@@ -45,5 +44,8 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-  }
+  },
+  "include": ["src/**/*"], //include defines and includes files that follow import statments as 'entry points' and anything they pull in get compiled
+  "exclude": ["migrations", "dist"]
+
 }
