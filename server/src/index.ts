@@ -15,7 +15,7 @@ app.use(express.json());
 app.get('/health', (_req: Request, res: Response)=>{ res.status(200).json({status: 'ok!'}); });
 
 //app.get(path,handler)
-app.use('/topic', topicRouter);
+app.use('/topics', topicRouter);
 app.use('/guesses', guessesRouter);
 app.use('/votes', voteRouter);
 app.use('/players', playerRouter);
