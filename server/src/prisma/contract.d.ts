@@ -33,9 +33,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'3e9be6cd56200b240cf5c3d908e8e37d352bfad5175a461268aa057049b9d36f'>;
+  StorageHashBase<'1c1111e8e52b3d629403d4e52eda6bd69ff339254b5f66fe23e158333e5cda7e'>;
 export type ExecutionHash =
-  ExecutionHashBase<'9ddb589b12e0acdae4087daf614e7a35e931e4cf6e52fa4f17392143526ff8dc'>;
+  ExecutionHashBase<'6713bd9cbab4207e463ea1371ac3310782f3dc56baf06ab865c42029b141aa5c'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -241,26 +241,26 @@ type DefaultLiteralValue<CodecId extends string, Encoded> = CodecId extends keyo
 
 export type FieldOutputTypes = {
   readonly public: {
-    readonly Guess: {
-      readonly id: CodecTypes['pg/text@1']['output'];
-      readonly playerId: CodecTypes['pg/text@1']['output'];
-      readonly itemAId: CodecTypes['pg/text@1']['output'];
-      readonly itemBId: CodecTypes['pg/text@1']['output'];
-      readonly statTypeId: CodecTypes['pg/text@1']['output'];
-      readonly mode: CodecTypes['pg/text@1']['output'];
-      readonly userAnswer: CodecTypes['pg/text@1']['output'];
-      readonly isCorrect: CodecTypes['pg/bool@1']['output'];
-      readonly responseMs: CodecTypes['pg/int4@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    };
     readonly Item: {
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly topicId: CodecTypes['pg/text@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
+      readonly imageUrl: CodecTypes['pg/text@1']['output'] | null;
     };
     readonly Player: {
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly token: CodecTypes['pg/text@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly Run: {
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly playerId: CodecTypes['pg/text@1']['output'];
+      readonly topicId: CodecTypes['pg/text@1']['output'];
+      readonly statTypeId: CodecTypes['pg/text@1']['output'];
+      readonly currentItemId: CodecTypes['pg/text@1']['output'];
+      readonly challengerItemId: CodecTypes['pg/text@1']['output'];
+      readonly streak: CodecTypes['pg/int4@1']['output'];
+      readonly status: CodecTypes['pg/text@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly StatType: {
@@ -302,26 +302,26 @@ export type FieldOutputTypes = {
 };
 export type FieldInputTypes = {
   readonly public: {
-    readonly Guess: {
-      readonly id: CodecTypes['pg/text@1']['input'];
-      readonly playerId: CodecTypes['pg/text@1']['input'];
-      readonly itemAId: CodecTypes['pg/text@1']['input'];
-      readonly itemBId: CodecTypes['pg/text@1']['input'];
-      readonly statTypeId: CodecTypes['pg/text@1']['input'];
-      readonly mode: CodecTypes['pg/text@1']['input'];
-      readonly userAnswer: CodecTypes['pg/text@1']['input'];
-      readonly isCorrect: CodecTypes['pg/bool@1']['input'];
-      readonly responseMs: CodecTypes['pg/int4@1']['input'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-    };
     readonly Item: {
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly topicId: CodecTypes['pg/text@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
+      readonly imageUrl: CodecTypes['pg/text@1']['input'] | null;
     };
     readonly Player: {
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly token: CodecTypes['pg/text@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly Run: {
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly playerId: CodecTypes['pg/text@1']['input'];
+      readonly topicId: CodecTypes['pg/text@1']['input'];
+      readonly statTypeId: CodecTypes['pg/text@1']['input'];
+      readonly currentItemId: CodecTypes['pg/text@1']['input'];
+      readonly challengerItemId: CodecTypes['pg/text@1']['input'];
+      readonly streak: CodecTypes['pg/int4@1']['input'];
+      readonly status: CodecTypes['pg/text@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly StatType: {
@@ -363,20 +363,9 @@ export type FieldInputTypes = {
 };
 export type StorageColumnTypes = {
   readonly public: {
-    readonly guess: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly id: CodecTypes['pg/text@1']['output'];
-      readonly isCorrect: CodecTypes['pg/bool@1']['output'];
-      readonly itemAId: CodecTypes['pg/text@1']['output'];
-      readonly itemBId: CodecTypes['pg/text@1']['output'];
-      readonly mode: CodecTypes['pg/text@1']['output'];
-      readonly playerId: CodecTypes['pg/text@1']['output'];
-      readonly responseMs: CodecTypes['pg/int4@1']['output'] | null;
-      readonly statTypeId: CodecTypes['pg/text@1']['output'];
-      readonly userAnswer: CodecTypes['pg/text@1']['output'];
-    };
     readonly item: {
       readonly id: CodecTypes['pg/text@1']['output'];
+      readonly imageUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly name: CodecTypes['pg/text@1']['output'];
       readonly topicId: CodecTypes['pg/text@1']['output'];
     };
@@ -384,6 +373,17 @@ export type StorageColumnTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly token: CodecTypes['pg/text@1']['output'];
+    };
+    readonly run: {
+      readonly challengerItemId: CodecTypes['pg/text@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly currentItemId: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly playerId: CodecTypes['pg/text@1']['output'];
+      readonly statTypeId: CodecTypes['pg/text@1']['output'];
+      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly streak: CodecTypes['pg/int4@1']['output'];
+      readonly topicId: CodecTypes['pg/text@1']['output'];
     };
     readonly statType: {
       readonly id: CodecTypes['pg/text@1']['output'];
@@ -424,20 +424,9 @@ export type StorageColumnTypes = {
 };
 export type StorageColumnInputTypes = {
   readonly public: {
-    readonly guess: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly id: CodecTypes['pg/text@1']['input'];
-      readonly isCorrect: CodecTypes['pg/bool@1']['input'];
-      readonly itemAId: CodecTypes['pg/text@1']['input'];
-      readonly itemBId: CodecTypes['pg/text@1']['input'];
-      readonly mode: CodecTypes['pg/text@1']['input'];
-      readonly playerId: CodecTypes['pg/text@1']['input'];
-      readonly responseMs: CodecTypes['pg/int4@1']['input'] | null;
-      readonly statTypeId: CodecTypes['pg/text@1']['input'];
-      readonly userAnswer: CodecTypes['pg/text@1']['input'];
-    };
     readonly item: {
       readonly id: CodecTypes['pg/text@1']['input'];
+      readonly imageUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly name: CodecTypes['pg/text@1']['input'];
       readonly topicId: CodecTypes['pg/text@1']['input'];
     };
@@ -445,6 +434,17 @@ export type StorageColumnInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly token: CodecTypes['pg/text@1']['input'];
+    };
+    readonly run: {
+      readonly challengerItemId: CodecTypes['pg/text@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly currentItemId: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly playerId: CodecTypes['pg/text@1']['input'];
+      readonly statTypeId: CodecTypes['pg/text@1']['input'];
+      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly streak: CodecTypes['pg/int4@1']['input'];
+      readonly topicId: CodecTypes['pg/text@1']['input'];
     };
     readonly statType: {
       readonly id: CodecTypes['pg/text@1']['input'];
@@ -501,91 +501,6 @@ type ContractBase = Omit<
         readonly kind: 'postgres-schema';
         readonly entries: {
           readonly table: {
-            readonly guess: {
-              columns: {
-                readonly id: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly playerId: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly itemAId: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly itemBId: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly statTypeId: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly mode: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly userAnswer: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly isCorrect: {
-                  readonly nativeType: 'bool';
-                  readonly codecId: 'pg/bool@1';
-                  readonly nullable: false;
-                };
-                readonly responseMs: {
-                  readonly nativeType: 'int4';
-                  readonly codecId: 'pg/int4@1';
-                  readonly nullable: true;
-                };
-                readonly createdAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
-                };
-              };
-              primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [];
-              indexes: readonly [
-                {
-                  readonly name: 'guess_itemAId_itemBId_statTypeId_idx_d0432812';
-                  readonly prefix: 'guess_itemAId_itemBId_statTypeId_idx';
-                  readonly columns: readonly ['itemAId', 'itemBId', 'statTypeId'];
-                  readonly unique: false;
-                },
-                {
-                  readonly name: 'guess_playerId_idx_710cf1aa';
-                  readonly prefix: 'guess_playerId_idx';
-                  readonly columns: readonly ['playerId'];
-                  readonly unique: false;
-                },
-              ];
-              foreignKeys: readonly [
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'guess';
-                    readonly columns: readonly ['playerId'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'player';
-                    readonly columns: readonly ['id'];
-                  };
-                },
-              ];
-            };
             readonly item: {
               columns: {
                 readonly id: {
@@ -602,6 +517,11 @@ type ContractBase = Omit<
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: false;
+                };
+                readonly imageUrl: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
@@ -652,6 +572,94 @@ type ContractBase = Omit<
               uniques: readonly [{ readonly columns: readonly ['token'] }];
               indexes: readonly [];
               foreignKeys: readonly [];
+            };
+            readonly run: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly playerId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly topicId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly statTypeId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly currentItemId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly challengerItemId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly streak: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly status: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'active'>;
+                  };
+                };
+                readonly createdAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'run_playerId_status_idx_530272b0';
+                  readonly prefix: 'run_playerId_status_idx';
+                  readonly columns: readonly ['playerId', 'status'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'run_playerId_idx_710cf1aa';
+                  readonly prefix: 'run_playerId_idx';
+                  readonly columns: readonly ['playerId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'run';
+                    readonly columns: readonly ['playerId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'player';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
             };
             readonly statType: {
               columns: {
@@ -969,89 +977,13 @@ type ContractBase = Omit<
       readonly model: 'VoteDimension';
     };
     readonly player: { readonly namespace: 'public' & NamespaceId; readonly model: 'Player' };
-    readonly guess: { readonly namespace: 'public' & NamespaceId; readonly model: 'Guess' };
+    readonly run: { readonly namespace: 'public' & NamespaceId; readonly model: 'Run' };
     readonly vote: { readonly namespace: 'public' & NamespaceId; readonly model: 'Vote' };
   };
   readonly domain: {
     readonly namespaces: {
       readonly public: {
         readonly models: {
-          readonly Guess: {
-            readonly fields: {
-              readonly id: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly playerId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly itemAId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly itemBId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly statTypeId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly mode: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly userAnswer: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly isCorrect: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
-              };
-              readonly responseMs: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
-              };
-              readonly createdAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                };
-              };
-            };
-            readonly relations: {
-              readonly player: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Player';
-                };
-                readonly cardinality: 'N:1';
-                readonly on: {
-                  readonly localFields: readonly ['playerId'];
-                  readonly targetFields: readonly ['id'];
-                };
-              };
-            };
-            readonly storage: {
-              readonly table: 'guess';
-              readonly namespaceId: 'public';
-              readonly fields: {
-                readonly id: { readonly column: 'id' };
-                readonly playerId: { readonly column: 'playerId' };
-                readonly itemAId: { readonly column: 'itemAId' };
-                readonly itemBId: { readonly column: 'itemBId' };
-                readonly statTypeId: { readonly column: 'statTypeId' };
-                readonly mode: { readonly column: 'mode' };
-                readonly userAnswer: { readonly column: 'userAnswer' };
-                readonly isCorrect: { readonly column: 'isCorrect' };
-                readonly responseMs: { readonly column: 'responseMs' };
-                readonly createdAt: { readonly column: 'createdAt' };
-              };
-            };
-          };
           readonly Item: {
             readonly fields: {
               readonly id: {
@@ -1064,6 +996,10 @@ type ContractBase = Omit<
               };
               readonly name: {
                 readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly imageUrl: {
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
             };
@@ -1098,6 +1034,7 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly topicId: { readonly column: 'topicId' };
                 readonly name: { readonly column: 'name' };
+                readonly imageUrl: { readonly column: 'imageUrl' };
               };
             };
           };
@@ -1120,11 +1057,8 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
-              readonly guesses: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Guess';
-                };
+              readonly runs: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Run' };
                 readonly cardinality: '1:N';
                 readonly on: {
                   readonly localFields: readonly ['id'];
@@ -1146,6 +1080,77 @@ type ContractBase = Omit<
               readonly fields: {
                 readonly id: { readonly column: 'id' };
                 readonly token: { readonly column: 'token' };
+                readonly createdAt: { readonly column: 'createdAt' };
+              };
+            };
+          };
+          readonly Run: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly playerId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly topicId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly statTypeId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly currentItemId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly challengerItemId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly streak: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly player: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Player';
+                };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['playerId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'run';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly playerId: { readonly column: 'playerId' };
+                readonly topicId: { readonly column: 'topicId' };
+                readonly statTypeId: { readonly column: 'statTypeId' };
+                readonly currentItemId: { readonly column: 'currentItemId' };
+                readonly challengerItemId: { readonly column: 'challengerItemId' };
+                readonly streak: { readonly column: 'streak' };
+                readonly status: { readonly column: 'status' };
                 readonly createdAt: { readonly column: 'createdAt' };
               };
             };
@@ -1480,14 +1485,6 @@ type ContractBase = Omit<
         {
           readonly ref: {
             readonly namespace: 'public';
-            readonly table: 'guess';
-            readonly column: 'id';
-          };
-          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
-        },
-        {
-          readonly ref: {
-            readonly namespace: 'public';
             readonly table: 'item';
             readonly column: 'id';
           };
@@ -1497,6 +1494,14 @@ type ContractBase = Omit<
           readonly ref: {
             readonly namespace: 'public';
             readonly table: 'player';
+            readonly column: 'id';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'run';
             readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };

@@ -27,18 +27,23 @@ const VOTE_DIMENSION = { key: 'taste', label: 'Which tastes better?' };
 
 // `value` maps to a Postgres `numeric` column — pass it as a string so no
 // float rounding happens on the way in.
-type ItemSeed = { name: string } & Record<StatKey, string>;
+//
+// imageUrl is a placeholder (picsum.photos, seeded deterministically per item
+// so it's stable across reseeds) until real product photos replace them.
+type ItemSeed = { name: string; imageUrl: string } & Record<StatKey, string>;
+
+const placeholderImage = (seed: string) => `https://picsum.photos/seed/${seed}/800/800`;
 
 const ITEMS: ItemSeed[] = [
-  { name: 'Big Mac', calories: '580', price: '5.99', sugar: '9' },
-  { name: 'Whopper', calories: '677', price: '6.49', sugar: '11' },
-  { name: 'McChicken', calories: '400', price: '2.99', sugar: '5' },
-  { name: 'Baconator', calories: '950', price: '7.29', sugar: '9' },
-  { name: "McDonald's Medium Fries", calories: '320', price: '3.79', sugar: '0' },
-  { name: 'BK Medium Fries', calories: '380', price: '3.49', sugar: '0' },
-  { name: 'McNuggets (10 pc)', calories: '420', price: '5.49', sugar: '0' },
-  { name: "Wendy's Frosty (medium)", calories: '470', price: '3.29', sugar: '62' },
-  { name: 'Starbucks Caramel Frappuccino (Grande)', calories: '380', price: '5.45', sugar: '54' },
+  { name: 'Big Mac', calories: '580', price: '5.99', sugar: '9', imageUrl: placeholderImage('big-mac') },
+  { name: 'Whopper', calories: '677', price: '6.49', sugar: '11', imageUrl: placeholderImage('whopper') },
+  { name: 'McChicken', calories: '400', price: '2.99', sugar: '5', imageUrl: placeholderImage('mcchicken') },
+  { name: 'Baconator', calories: '950', price: '7.29', sugar: '9', imageUrl: placeholderImage('baconator') },
+  { name: "McDonald's Medium Fries", calories: '320', price: '3.79', sugar: '0', imageUrl: placeholderImage('mcd-fries') },
+  { name: 'BK Medium Fries', calories: '380', price: '3.49', sugar: '0', imageUrl: placeholderImage('bk-fries') },
+  { name: 'McNuggets (10 pc)', calories: '420', price: '5.49', sugar: '0', imageUrl: placeholderImage('mcnuggets') },
+  { name: "Wendy's Frosty (medium)", calories: '470', price: '3.29', sugar: '62', imageUrl: placeholderImage('frosty') },
+  { name: 'Starbucks Caramel Frappuccino (Grande)', calories: '380', price: '5.45', sugar: '54', imageUrl: placeholderImage('frappuccino') },
 ];
 
 // --- deterministic id helpers -------------------------------------------------
@@ -101,8 +106,8 @@ async function seed() {
       const iid = itemId(item.name);
 
       await tx.orm.public.Item.upsert({
-        create: { id: iid, topicId, name: item.name },
-        update: { topicId, name: item.name },
+        create: { id: iid, topicId, name: item.name, imageUrl: item.imageUrl },
+        update: { topicId, name: item.name, imageUrl: item.imageUrl },
       });
 
       for (const key of STAT_KEYS) {

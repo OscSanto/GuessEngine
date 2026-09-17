@@ -15,9 +15,10 @@ model Topic {
   items          Item[]
 }
 model Item {
-  id      String @id @default(uuid())
-  topicId String
-  name    String                          // "Big Mac", "Abyssal whip"
+  id       String  @id @default(uuid())
+  topicId  String
+  name     String                         // "Big Mac", "Abyssal whip"
+  imageUrl String?                        // shown in the higher/lower cards
 
   topic      Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
   statValues StatValue[]                   // an item HAS MANY stat values
@@ -63,25 +64,32 @@ model Player {
   token     String   @unique               // IP-derived or cached client token
   createdAt DateTime @default(now())        // when we first saw them
 
-  guesses Guess[]                           // a player HAS MANY guesses
-  votes   Vote[]                            // and HAS MANY votes
+  runs  Run[]                              // a player HAS MANY runs (higher/lower games)
+  votes Vote[]                             // and HAS MANY votes
 }
 
-model Guess {
-  id            String   @id @default(uuid())
-  playerId      String
-  itemAId       String                      // the two items shown
-  itemBId       String
-  statTypeId    String                      // which stat they guessed on
-  mode          String                      // "higher_lower" or "over_under"
-  userAnswer    String                      // what they picked
-  isCorrect     Boolean                     // did they get it right
-  responseMs    Int?                        // how fast (optional) — speed scoring
-  createdAt     DateTime @default(now())
+// A single higher/lower "run": current (revealed) item, a waiting challenger
+// (hidden value), and the streak built up so far. One row per active or
+// finished run — a new run replaces a player's previous active one.
+//
+// topicId / statTypeId / currentItemId / challengerItemId are plain ids, not
+// relations — same convention the old Guess/Vote models used: referential
+// integrity for these is enforced in application code (see src/routes/runs.ts),
+// not by a DB foreign key.
+model Run {
+  id               String   @id @default(uuid())
+  playerId         String
+  topicId          String
+  statTypeId       String                  // fixed for the whole run
+  currentItemId    String                  // revealed to the player
+  challengerItemId String                  // hidden until guessed
+  streak           Int      @default(0)
+  status           String   @default("active") // "active" | "ended"
+  createdAt        DateTime @default(now())
 
   player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
-  @@index([itemAId, itemBId, statTypeId])
+  @@index([playerId, status])
 }
 
 model Vote {

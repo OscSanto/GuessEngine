@@ -4,16 +4,16 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
-    "guess": {
-      "model": "Guess",
-      "namespace": "public"
-    },
     "item": {
       "model": "Item",
       "namespace": "public"
     },
     "player": {
       "model": "Player",
+      "namespace": "public"
+    },
+    "run": {
+      "model": "Run",
       "namespace": "public"
     },
     "statType": {
@@ -41,137 +41,17 @@
     "namespaces": {
       "public": {
         "models": {
-          "Guess": {
-            "fields": {
-              "createdAt": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/timestamptz-temporal@1",
-                  "kind": "scalar"
-                }
-              },
-              "id": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "isCorrect": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/bool@1",
-                  "kind": "scalar"
-                }
-              },
-              "itemAId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "itemBId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "mode": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "playerId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "responseMs": {
-                "nullable": true,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "statTypeId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "userAnswer": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "player": {
-                "cardinality": "N:1",
-                "on": {
-                  "localFields": [
-                    "playerId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "Player",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "createdAt": {
-                  "column": "createdAt"
-                },
-                "id": {
-                  "column": "id"
-                },
-                "isCorrect": {
-                  "column": "isCorrect"
-                },
-                "itemAId": {
-                  "column": "itemAId"
-                },
-                "itemBId": {
-                  "column": "itemBId"
-                },
-                "mode": {
-                  "column": "mode"
-                },
-                "playerId": {
-                  "column": "playerId"
-                },
-                "responseMs": {
-                  "column": "responseMs"
-                },
-                "statTypeId": {
-                  "column": "statTypeId"
-                },
-                "userAnswer": {
-                  "column": "userAnswer"
-                }
-              },
-              "namespaceId": "public",
-              "table": "guess"
-            }
-          },
           "Item": {
             "fields": {
               "id": {
                 "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "imageUrl": {
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -229,6 +109,9 @@
                 "id": {
                   "column": "id"
                 },
+                "imageUrl": {
+                  "column": "imageUrl"
+                },
                 "name": {
                   "column": "name"
                 },
@@ -265,7 +148,7 @@
               }
             },
             "relations": {
-              "guesses": {
+              "runs": {
                 "cardinality": "1:N",
                 "on": {
                   "localFields": [
@@ -276,7 +159,7 @@
                   ]
                 },
                 "to": {
-                  "model": "Guess",
+                  "model": "Run",
                   "namespace": "public"
                 }
               },
@@ -310,6 +193,123 @@
               },
               "namespaceId": "public",
               "table": "player"
+            }
+          },
+          "Run": {
+            "fields": {
+              "challengerItemId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "currentItemId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "playerId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "statTypeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "streak": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "topicId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "player": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "playerId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Player",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "challengerItemId": {
+                  "column": "challengerItemId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "currentItemId": {
+                  "column": "currentItemId"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "playerId": {
+                  "column": "playerId"
+                },
+                "statTypeId": {
+                  "column": "statTypeId"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "streak": {
+                  "column": "streak"
+                },
+                "topicId": {
+                  "column": "topicId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "run"
             }
           },
           "StatType": {
@@ -796,115 +796,17 @@
       "public": {
         "entries": {
           "table": {
-            "guess": {
-              "columns": {
-                "createdAt": {
-                  "codecId": "pg/timestamptz-temporal@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
-                  "nativeType": "timestamptz",
-                  "nullable": false
-                },
-                "id": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "isCorrect": {
-                  "codecId": "pg/bool@1",
-                  "nativeType": "bool",
-                  "nullable": false
-                },
-                "itemAId": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "itemBId": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "mode": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "playerId": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "responseMs": {
-                  "codecId": "pg/int4@1",
-                  "nativeType": "int4",
-                  "nullable": true
-                },
-                "statTypeId": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "userAnswer": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "onDelete": "cascade",
-                  "source": {
-                    "columns": [
-                      "playerId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "guess"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "player"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "itemAId",
-                    "itemBId",
-                    "statTypeId"
-                  ],
-                  "name": "guess_itemAId_itemBId_statTypeId_idx_d0432812",
-                  "prefix": "guess_itemAId_itemBId_statTypeId_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
-                    "playerId"
-                  ],
-                  "name": "guess_playerId_idx_710cf1aa",
-                  "prefix": "guess_playerId_idx",
-                  "unique": false
-                }
-              ],
-              "primaryKey": {
-                "columns": [
-                  "id"
-                ]
-              },
-              "uniques": []
-            },
             "item": {
               "columns": {
                 "id": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": false
+                },
+                "imageUrl": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
                 },
                 "name": {
                   "codecId": "pg/text@1",
@@ -989,6 +891,111 @@
                   ]
                 }
               ]
+            },
+            "run": {
+              "columns": {
+                "challengerItemId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "currentItemId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "playerId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "statTypeId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "active"
+                  },
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "streak": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "topicId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "playerId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "run"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "player"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "playerId"
+                  ],
+                  "name": "run_playerId_idx_710cf1aa",
+                  "prefix": "run_playerId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "playerId",
+                    "status"
+                  ],
+                  "name": "run_playerId_status_idx_530272b0",
+                  "prefix": "run_playerId_status_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
             },
             "statType": {
               "columns": {
@@ -1388,23 +1395,12 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "3e9be6cd56200b240cf5c3d908e8e37d352bfad5175a461268aa057049b9d36f"
+    "storageHash": "1c1111e8e52b3d629403d4e52eda6bd69ff339254b5f66fe23e158333e5cda7e"
   },
   "execution": {
-    "executionHash": "9ddb589b12e0acdae4087daf614e7a35e931e4cf6e52fa4f17392143526ff8dc",
+    "executionHash": "6713bd9cbab4207e463ea1371ac3310782f3dc56baf06ab865c42029b141aa5c",
     "mutations": {
       "defaults": [
-        {
-          "onCreate": {
-            "id": "uuidv4",
-            "kind": "generator"
-          },
-          "ref": {
-            "column": "id",
-            "namespace": "public",
-            "table": "guess"
-          }
-        },
         {
           "onCreate": {
             "id": "uuidv4",
@@ -1425,6 +1421,17 @@
             "column": "id",
             "namespace": "public",
             "table": "player"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "run"
           }
         },
         {
